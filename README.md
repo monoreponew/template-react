@@ -1,1 +1,1 @@
-# Simple Docusaurus Template
+# Simple React Template

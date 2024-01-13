@@ -1,0 +1,28 @@
+load("@genrules//npm:index.bzl", "npm")
+load("@genrules//gcs:index.bzl", "gcs_deploy")
+load("@genrules//terraform:index.bzl", "terraform")
+
+npm(
+    name = "build",
+    command = "run build",
+    output_directory = "build",
+    deps = [":deps"],
+    local = True,
+)
+
+gcs_deploy(
+    name = "deploy",
+    bucket_name = "$BUCKET_NAME",
+    deps = [":build"],
+)
+
+filegroup(
+    name = "deps",
+    srcs = glob([
+        "src/**",
+        "static/**",
+        "docs/**",
+        "blog/**",
+        "node_modules/**",
+    ]) + ["package.json", "package-lock.json", "docusaurus.config.ts", "sidebars.ts"],
+)
